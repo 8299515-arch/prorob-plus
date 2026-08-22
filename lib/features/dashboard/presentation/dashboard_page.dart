@@ -11,31 +11,31 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final modules = [
-      _M(
+      const _M(
         Icons.construction,
         'Проекты',
         'Объекты, этапы и прогресс',
         '/projects',
       ),
-      _M(
+      const _M(
         Icons.task_alt,
         'Задачи',
         'Дедлайны, чек-листы и контроль',
         '/tasks',
       ),
-      _M(
+      const _M(
         Icons.account_balance_wallet,
         'Финансы',
         'Сметы, расходы и прибыль',
         '/finance',
       ),
-      _M(
+      const _M(
         Icons.people_outline,
         'CRM и команда',
         'Клиенты, бригады и роли',
         '/crm',
       ),
-      _M(
+      const _M(
         Icons.description_outlined,
         'Документы',
         'Документы и файлы объектов',
