@@ -238,7 +238,7 @@ class _FinanceDialogState extends State<_FinanceDialog> {
   final _title = TextEditingController();
   final _amount = TextEditingController();
   final _category = TextEditingController();
-  DateTime _date = DateTime.now();
+  final DateTime _date = DateTime.now();
 
   @override
   void dispose() {
