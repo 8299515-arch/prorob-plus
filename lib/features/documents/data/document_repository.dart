@@ -4,6 +4,7 @@ import '../domain/document.dart';
 
 abstract interface class DocumentRepository {
   Future<List<ProjectDocument>> getDocuments({String? projectId});
+  Future<ProjectDocument> uploadDocument({required String projectId, required String path, required String fileName});
   Future<void> deleteDocument(String id);
 }
 
@@ -15,6 +16,13 @@ class ApiDocumentRepository implements DocumentRepository {
   Future<List<ProjectDocument>> getDocuments({String? projectId}) async {
     final response = await _dio.get<List<dynamic>>('/documents', queryParameters: {if (projectId != null) 'project_id': projectId});
     return (response.data ?? const <dynamic>[]).whereType<Map<String, dynamic>>().map(_fromJson).toList(growable: false);
+  }
+
+  @override
+  Future<ProjectDocument> uploadDocument({required String projectId, required String path, required String fileName}) async {
+    final form = FormData.fromMap({'project_id': projectId, 'file': await MultipartFile.fromFile(path, filename: fileName)});
+    final response = await _dio.post<Map<String, dynamic>>('/documents', data: form, options: Options(contentType: 'multipart/form-data'));
+    return _fromJson(response.data ?? const {});
   }
 
   @override
