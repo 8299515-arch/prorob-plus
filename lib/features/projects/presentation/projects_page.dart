@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/logging/app_logger.dart';
 import '../data/project_repository.dart';
@@ -88,6 +89,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
                             final project = _projects[index];
                             return Card(
                               child: ListTile(
+                                onTap: () => context.push('/projects/${project.id}', extra: project),
                                 leading: CircleAvatar(child: Icon(project.status == ProjectStatus.active ? Icons.construction : Icons.business)),
                                 title: Text(project.name),
                                 subtitle: Text('${project.address}\nПрогресс: ${(project.progress * 100).round()}%'),
