@@ -9,6 +9,7 @@ import '../../features/tasks/presentation/tasks_page.dart';
 import '../../features/finance/presentation/finance_page.dart';
 import '../../features/crm/presentation/contacts_page.dart';
 import '../../features/documents/presentation/documents_page.dart';
+import '../../features/account/presentation/account_page.dart';
 
 class AppRouter {
   AppRouter(this._authSession) {
@@ -30,6 +31,7 @@ class AppRouter {
       GoRoute(path: '/crm', builder: (_, __) => const ContactsPage()),
       GoRoute(path: '/documents', builder: (_, __) => const DocumentsPage()),
       GoRoute(path: '/projects/:id/documents', builder: (_, state) => DocumentsPage(projectId: state.pathParameters['id']!)),
+      GoRoute(path: '/account', builder: (_, __) => AccountPage(authSession: _authSession)),
     ]);
   }
   final AuthSession _authSession;
