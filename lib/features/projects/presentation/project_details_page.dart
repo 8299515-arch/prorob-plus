@@ -44,7 +44,11 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
       );
       if (mounted) setState(() => _project = updated);
     } catch (error, stackTrace) {
-      AppLogger.instance.e('Project update failed', error: error, stackTrace: stackTrace);
+      AppLogger.instance.e(
+        'Project update failed',
+        error: error,
+        stackTrace: stackTrace,
+      );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Не удалось сохранить изменения.')),
@@ -66,7 +70,11 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
             tooltip: 'Редактировать',
             onPressed: _saving ? null : _edit,
             icon: _saving
-                ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
                 : const Icon(Icons.edit_outlined),
           ),
         ],
@@ -80,32 +88,61 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(_project.name, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+                  Text(
+                    _project.name,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
                   const SizedBox(height: 8),
-                  Text(_project.address, style: Theme.of(context).textTheme.bodyLarge),
+                  Text(
+                    _project.address,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
                   const SizedBox(height: 20),
-                  Row(children: [
-                    const Icon(Icons.flag_outlined),
-                    const SizedBox(width: 8),
-                    Text(_statusTitle(_project.status)),
-                  ]),
+                  Row(
+                    children: [
+                      const Icon(Icons.flag_outlined),
+                      const SizedBox(width: 8),
+                      Text(_statusTitle(_project.status)),
+                    ],
+                  ),
                   const SizedBox(height: 16),
-                  Row(children: [
-                    Expanded(child: LinearProgressIndicator(value: _project.progress)),
-                    const SizedBox(width: 12),
-                    Text('$percent%'),
-                  ]),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: LinearProgressIndicator(value: _project.progress),
+                      ),
+                      const SizedBox(width: 12),
+                      Text('$percent%'),
+                    ],
+                  ),
                 ],
               ),
             ),
           ),
           if (_project.description?.isNotEmpty == true) ...[
             const SizedBox(height: 16),
-            Card(child: Padding(padding: const EdgeInsets.all(20), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Описание', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              Text(_project.description!),
-            ]))),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Описание',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(_project.description!),
+                  ],
+                ),
+              ),
+            ),
           ],
         ],
       ),
@@ -121,7 +158,14 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
 }
 
 class _ProjectEditDraft {
-  const _ProjectEditDraft(this.name, this.address, this.description, this.progress, this.status);
+  const _ProjectEditDraft(
+    this.name,
+    this.address,
+    this.description,
+    this.progress,
+    this.status,
+  );
+
   final String name;
   final String address;
   final String? description;
@@ -131,7 +175,9 @@ class _ProjectEditDraft {
 
 class _ProjectEditDialog extends StatefulWidget {
   const _ProjectEditDialog({required this.project});
+
   final Project project;
+
   @override
   State<_ProjectEditDialog> createState() => _ProjectEditDialogState();
 }
@@ -149,7 +195,8 @@ class _ProjectEditDialogState extends State<_ProjectEditDialog> {
     super.initState();
     _name = TextEditingController(text: widget.project.name);
     _address = TextEditingController(text: widget.project.address);
-    _description = TextEditingController(text: widget.project.description ?? '');
+    _description =
+        TextEditingController(text: widget.project.description ?? '');
     _progress = widget.project.progress;
     _status = widget.project.status;
   }
@@ -168,27 +215,81 @@ class _ProjectEditDialogState extends State<_ProjectEditDialog> {
         content: Form(
           key: _key,
           child: SingleChildScrollView(
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              TextFormField(controller: _name, decoration: const InputDecoration(labelText: 'Название'), validator: (v) => v?.trim().isEmpty == true ? 'Введите название' : null),
-              const SizedBox(height: 12),
-              TextFormField(controller: _address, decoration: const InputDecoration(labelText: 'Адрес'), validator: (v) => v?.trim().isEmpty == true ? 'Введите адрес' : null),
-              const SizedBox(height: 12),
-              DropdownButtonFormField<ProjectStatus>(
-                value: _status,
-                decoration: const InputDecoration(labelText: 'Статус'),
-                items: ProjectStatus.values.map((status) => DropdownMenuItem(value: status, child: Text(_statusTitle(status)))).toList(),
-                onChanged: (value) => setState(() => _status = value ?? _status),
-              ),
-              const SizedBox(height: 12),
-              Align(alignment: Alignment.centerLeft, child: Text('Прогресс: ${(_progress * 100).round()}%')),
-              Slider(value: _progress, onChanged: (value) => setState(() => _progress = value)),
-              TextFormField(controller: _description, decoration: const InputDecoration(labelText: 'Описание'), maxLines: 3),
-            ]),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: _name,
+                  decoration: const InputDecoration(labelText: 'Название'),
+                  validator: (v) => v?.trim().isEmpty == true
+                      ? 'Введите название'
+                      : null,
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: _address,
+                  decoration: const InputDecoration(labelText: 'Адрес'),
+                  validator: (v) => v?.trim().isEmpty == true
+                      ? 'Введите адрес'
+                      : null,
+                ),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<ProjectStatus>(
+                  value: _status,
+                  decoration: const InputDecoration(labelText: 'Статус'),
+                  items: ProjectStatus.values
+                      .map(
+                        (status) => DropdownMenuItem(
+                          value: status,
+                          child: Text(_statusTitle(status)),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) =>
+                      setState(() => _status = value ?? _status),
+                ),
+                const SizedBox(height: 12),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Прогресс: ${(_progress * 100).round()}%',
+                  ),
+                ),
+                Slider(
+                  value: _progress,
+                  onChanged: (value) => setState(() => _progress = value),
+                ),
+                TextFormField(
+                  controller: _description,
+                  decoration: const InputDecoration(labelText: 'Описание'),
+                  maxLines: 3,
+                ),
+              ],
+            ),
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Отмена')),
-          FilledButton(onPressed: () { if (_key.currentState!.validate()) Navigator.pop(context, _ProjectEditDraft(_name.text.trim(), _address.text.trim(), _description.text.trim(), _progress, _status)); }, child: const Text('Сохранить')),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Отмена'),
+          ),
+          FilledButton(
+            onPressed: () {
+              if (_key.currentState!.validate()) {
+                Navigator.pop(
+                  context,
+                  _ProjectEditDraft(
+                    _name.text.trim(),
+                    _address.text.trim(),
+                    _description.text.trim(),
+                    _progress,
+                    _status,
+                  ),
+                );
+              }
+            },
+            child: const Text('Сохранить'),
+          ),
         ],
       );
 
