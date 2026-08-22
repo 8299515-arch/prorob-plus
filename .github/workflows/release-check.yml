@@ -33,6 +33,11 @@ jobs:
       - name: Install Android API 36
         run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
 
+      - name: Create Flutter local.properties for CI
+        shell: bash
+        run: |
+          printf 'flutter.sdk=%s\n' "$FLUTTER_ROOT" > android/local.properties
+
       - name: Generate Gradle wrapper for CI
         shell: bash
         run: |
@@ -43,11 +48,6 @@ jobs:
           /tmp/gradle-8.14.5/bin/gradle -p android wrapper --gradle-version 8.14.5 --distribution-type bin
           test -s android/gradle/wrapper/gradle-wrapper.jar
           grep -q 'gradle-8.14.5-bin.zip' android/gradle/wrapper/gradle-wrapper.properties
-
-      - name: Create Flutter local.properties for CI
-        shell: bash
-        run: |
-          printf 'flutter.sdk=%s\n' "$FLUTTER_ROOT" > android/local.properties
 
       - name: Enable Gradle launcher
         run: chmod +x android/gradlew
