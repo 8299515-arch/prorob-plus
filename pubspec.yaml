@@ -1,7 +1,7 @@
 name: prorab_plus
 description: "Прораб+ — управление строительными объектами, задачами, финансами и командой"
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
+  connectivity_plus: ^6.1.5
   dio: ^5.7.0
   equatable: ^2.0.7
   file_picker: ^8.1.7
