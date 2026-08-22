@@ -6,6 +6,7 @@ import '../../features/dashboard/presentation/dashboard_page.dart';
 import '../../features/projects/domain/project.dart';
 import '../../features/projects/presentation/project_details_page.dart';
 import '../../features/projects/presentation/projects_page.dart';
+import '../../features/tasks/presentation/tasks_page.dart';
 
 class AppRouter {
   AppRouter(this._authSession) {
@@ -31,6 +32,8 @@ class AppRouter {
             return ProjectDetailsPage(project: project);
           },
         ),
+        GoRoute(path: '/tasks', builder: (context, state) => const TasksPage()),
+        GoRoute(path: '/projects/:id/tasks', builder: (context, state) => TasksPage(projectId: state.pathParameters['id']!)),
       ],
     );
   }
