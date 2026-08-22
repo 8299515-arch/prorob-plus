@@ -1,7 +1,17 @@
 enum FinanceEntryType { income, expense }
 
 class FinanceEntry {
-  const FinanceEntry({required this.id, required this.projectId, required this.type, required this.title, required this.amount, required this.currency, required this.date, this.category});
+  const FinanceEntry({
+    required this.id,
+    required this.projectId,
+    required this.type,
+    required this.title,
+    required this.amount,
+    required this.currency,
+    required this.date,
+    this.category,
+  });
+
   final String id;
   final String projectId;
   final FinanceEntryType type;
