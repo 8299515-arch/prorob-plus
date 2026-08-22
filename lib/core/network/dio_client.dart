@@ -4,11 +4,11 @@ import '../logging/app_logger.dart';
 import '../storage/token_storage.dart';
 
 class DioClient {
-  DioClient({TokenStorage? tokenStorage})
-      : _tokenStorage = tokenStorage ?? TokenStorage() {
+  DioClient({TokenStorage? tokenStorage, String? baseUrl}) : _tokenStorage = tokenStorage ?? TokenStorage() {
+    final configuredBaseUrl = baseUrl ?? const String.fromEnvironment('API_BASE_URL', defaultValue: 'https://api.prorab.plus');
     dio = Dio(
       BaseOptions(
-        baseUrl: 'https://api.prorab.plus',
+        baseUrl: configuredBaseUrl,
         connectTimeout: const Duration(seconds: 15),
         sendTimeout: const Duration(seconds: 15),
         receiveTimeout: const Duration(seconds: 20),
