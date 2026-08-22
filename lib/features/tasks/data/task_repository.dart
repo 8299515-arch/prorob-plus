@@ -58,7 +58,8 @@ class ApiTaskRepository implements TaskRepository {
           if (description?.trim().isNotEmpty == true)
             'description': description!.trim(),
           'priority': priority.name,
-          if (dueDate != null) 'due_date': dueDate.toUtc().toIso8601String(),
+          if (dueDate != null)
+            'due_date': dueDate.toUtc().toIso8601String(),
         },
       );
       return _fromJson(response.data ?? const {});
