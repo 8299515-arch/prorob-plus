@@ -92,8 +92,8 @@ class _TasksPageState extends State<TasksPage> {
     }
   }
 
-  void _showError(String text) => ScaffoldMessenger.of(context)
-      .showSnackBar(SnackBar(content: Text(text)));
+  void _showError(String text) =>
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
 
   @override
   Widget build(BuildContext context) => Scaffold(
