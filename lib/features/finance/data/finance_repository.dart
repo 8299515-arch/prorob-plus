@@ -6,6 +6,7 @@ import '../domain/finance_entry.dart';
 
 abstract interface class FinanceRepository {
   Future<List<FinanceEntry>> getEntries({String? projectId});
+
   Future<FinanceEntry> createEntry({
     required String projectId,
     required FinanceEntryType type,
@@ -15,12 +16,12 @@ abstract interface class FinanceRepository {
     String? category,
     DateTime? date,
   });
+
   Future<void> deleteEntry(String id);
 }
 
 class ApiFinanceRepository implements FinanceRepository {
-  ApiFinanceRepository({DioClient? client})
-      : _dio = (client ?? DioClient()).dio;
+  ApiFinanceRepository({DioClient? client}) : _dio = (client ?? DioClient()).dio;
 
   final Dio _dio;
 
@@ -87,8 +88,7 @@ class ApiFinanceRepository implements FinanceRepository {
         title: '${json['title'] ?? ''}',
         amount: (json['amount'] as num?)?.toDouble() ?? 0,
         currency: '${json['currency'] ?? 'UAH'}',
-        date:
-            DateTime.tryParse(json['date']?.toString() ?? '') ?? DateTime.now(),
+        date: DateTime.tryParse(json['date']?.toString() ?? '') ?? DateTime.now(),
         category: json['category'] as String?,
       );
 }
