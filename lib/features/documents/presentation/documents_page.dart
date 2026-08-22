@@ -34,8 +34,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
       _error = null;
     });
     try {
-      _documents =
-          await _repository.getDocuments(projectId: widget.projectId);
+      _documents = await _repository.getDocuments(projectId: widget.projectId);
     } catch (error, stackTrace) {
       AppLogger.instance.e(
         'Documents loading failed',

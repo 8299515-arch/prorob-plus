@@ -84,8 +84,7 @@ class _FinancePageState extends State<FinancePage> {
       await _repository.deleteEntry(entry.id);
       if (mounted) {
         setState(
-          () => _entries =
-              _entries.where((e) => e.id != entry.id).toList(),
+          () => _entries = _entries.where((e) => e.id != entry.id).toList(),
         );
       }
     } catch (error, stackTrace) {

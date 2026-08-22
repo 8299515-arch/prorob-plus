@@ -229,17 +229,15 @@ class _ProjectDialogState extends State<_ProjectDialog> {
                 TextFormField(
                   controller: _name,
                   decoration: const InputDecoration(labelText: 'Название'),
-                  validator: (v) => (v?.trim().isEmpty ?? true)
-                      ? 'Введите название'
-                      : null,
+                  validator: (v) =>
+                      (v?.trim().isEmpty ?? true) ? 'Введите название' : null,
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: _address,
                   decoration: const InputDecoration(labelText: 'Адрес'),
-                  validator: (v) => (v?.trim().isEmpty ?? true)
-                      ? 'Введите адрес'
-                      : null,
+                  validator: (v) =>
+                      (v?.trim().isEmpty ?? true) ? 'Введите адрес' : null,
                 ),
                 const SizedBox(height: 12),
                 TextFormField(

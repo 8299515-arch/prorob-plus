@@ -59,8 +59,7 @@ class ApiFinanceRepository implements FinanceRepository {
           'title': title.trim(),
           'amount': amount,
           'currency': currency,
-          if (category?.trim().isNotEmpty == true)
-            'category': category!.trim(),
+          if (category?.trim().isNotEmpty == true) 'category': category!.trim(),
           'date': (date ?? DateTime.now()).toUtc().toIso8601String(),
         },
       );
@@ -88,8 +87,8 @@ class ApiFinanceRepository implements FinanceRepository {
         title: '${json['title'] ?? ''}',
         amount: (json['amount'] as num?)?.toDouble() ?? 0,
         currency: '${json['currency'] ?? 'UAH'}',
-        date: DateTime.tryParse(json['date']?.toString() ?? '') ??
-            DateTime.now(),
+        date:
+            DateTime.tryParse(json['date']?.toString() ?? '') ?? DateTime.now(),
         category: json['category'] as String?,
       );
 }
