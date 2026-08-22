@@ -4,6 +4,8 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+import java.util.Properties
+
 android {
     namespace = "com.prorab.plus"
     compileSdk = flutter.compileSdkVersion
@@ -17,9 +19,24 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        release {
+            def keyPropertiesFile = rootProject.file("key.properties")
+            if (!keyPropertiesFile.exists()) {
+                throw new GradleException("android/key.properties is required for a production release build")
+            }
+            def keyProperties = new Properties()
+            keyPropertiesFile.withInputStream { keyProperties.load(it) }
+            keyAlias = keyProperties['keyAlias']
+            keyPassword = keyProperties['keyPassword']
+            storeFile = keyProperties['storeFile'] ? file(keyProperties['storeFile']) : null
+            storePassword = keyProperties['storePassword']
+        }
+    }
+
     buildTypes {
         release {
-            signingConfig = signingConfigs.debug
+            signingConfig = signingConfigs.release
             minifyEnabled = false
             shrinkResources = false
         }
