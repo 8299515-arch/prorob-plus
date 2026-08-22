@@ -41,13 +41,23 @@ class _LoginPageState extends State<LoginPage> {
       widget.authSession.setAuthenticated(true);
       if (mounted) context.go('/');
     } on DioException catch (error, stackTrace) {
-      AppLogger.instance.e('Login request failed', error: error, stackTrace: stackTrace);
+      AppLogger.instance.e(
+        'Login request failed',
+        error: error,
+        stackTrace: stackTrace,
+      );
       if (mounted) _showError(_dioMessage(error));
     } on FormatException catch (error) {
       if (mounted) _showError(error.message);
     } catch (error, stackTrace) {
-      AppLogger.instance.e('Unexpected login error', error: error, stackTrace: stackTrace);
-      if (mounted) _showError('Не удалось выполнить вход. Попробуйте ещё раз.');
+      AppLogger.instance.e(
+        'Unexpected login error',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      if (mounted) {
+        _showError('Не удалось выполнить вход. Попробуйте ещё раз.');
+      }
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -87,20 +97,39 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     const Icon(Icons.construction, size: 64),
                     const SizedBox(height: 16),
-                    Text('Прораб+', textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
+                    Text(
+                      'Прораб+',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 8),
-                    Text('Управление строительными объектами', textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyLarge),
+                    Text(
+                      'Управление строительными объектами',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
                     const SizedBox(height: 32),
                     TextFormField(
                       controller: _email,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
-                      autofillHints: const [AutofillHints.username, AutofillHints.email],
-                      decoration: const InputDecoration(labelText: 'Email', prefixIcon: Icon(Icons.email_outlined)),
+                      autofillHints: const [
+                        AutofillHints.username,
+                        AutofillHints.email,
+                      ],
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        prefixIcon: Icon(Icons.email_outlined),
+                      ),
                       validator: (value) {
                         final email = value?.trim() ?? '';
                         if (email.isEmpty) return 'Введите email';
-                        if (!email.contains('@') || !email.contains('.')) return 'Введите корректный email';
+                        if (!email.contains('@') || !email.contains('.')) {
+                          return 'Введите корректный email';
+                        }
                         return null;
                       },
                     ),
@@ -115,12 +144,22 @@ class _LoginPageState extends State<LoginPage> {
                         labelText: 'Пароль',
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
-                          tooltip: _obscurePassword ? 'Показать пароль' : 'Скрыть пароль',
-                          onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                          icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
+                          tooltip: _obscurePassword
+                              ? 'Показать пароль'
+                              : 'Скрыть пароль',
+                          onPressed: () => setState(
+                            () => _obscurePassword = !_obscurePassword,
+                          ),
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
                         ),
                       ),
-                      validator: (value) => (value ?? '').length < 6 ? 'Пароль должен содержать минимум 6 символов' : null,
+                      validator: (value) => (value ?? '').length < 6
+                          ? 'Пароль должен содержать минимум 6 символов'
+                          : null,
                     ),
                     const SizedBox(height: 24),
                     FilledButton(
@@ -128,7 +167,11 @@ class _LoginPageState extends State<LoginPage> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         child: _loading
-                            ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2))
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
                             : const Text('Войти'),
                       ),
                     ),
