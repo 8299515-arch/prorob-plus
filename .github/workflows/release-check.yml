@@ -21,6 +21,12 @@ jobs:
           channel: stable
           cache: true
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
       - name: Dependencies
         run: flutter pub get
 
@@ -32,6 +38,25 @@ jobs:
 
       - name: Tests
         run: flutter test --coverage
+
+      - name: Create ephemeral CI signing key
+        shell: bash
+        run: |
+          keytool -genkeypair -v \
+            -keystore android/ci-release.jks \
+            -storepass changeit \
+            -keypass changeit \
+            -alias ci-release \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 3650 \
+            -dname "CN=CI Release, OU=Build, O=Prorab Plus, L=Kyiv, ST=Kyiv, C=UA"
+          cat > android/key.properties <<'EOF'
+          storePassword=changeit
+          keyPassword=changeit
+          keyAlias=ci-release
+          storeFile=ci-release.jks
+          EOF
 
       - name: Build Android release
         run: flutter build appbundle --release --no-pub
