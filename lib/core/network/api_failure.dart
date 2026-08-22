@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 sealed class ApiFailure implements Exception {
   const ApiFailure(this.message);
+
   final String message;
 }
 
@@ -14,7 +15,9 @@ final class UnauthorizedFailure extends ApiFailure {
 }
 
 final class ServerFailure extends ApiFailure {
-  const ServerFailure([super.message = 'Сервер временно недоступен. Попробуйте позже.']);
+  const ServerFailure([
+    super.message = 'Сервер временно недоступен. Попробуйте позже.',
+  ]);
 }
 
 final class RequestFailure extends ApiFailure {
@@ -24,6 +27,7 @@ final class RequestFailure extends ApiFailure {
 ApiFailure mapDioFailure(Object error) {
   if (error is ApiFailure) return error;
   if (error is! DioException) return const RequestFailure();
+
   switch (error.type) {
     case DioExceptionType.connectionError:
     case DioExceptionType.connectionTimeout:
@@ -32,8 +36,12 @@ ApiFailure mapDioFailure(Object error) {
       return const NetworkFailure();
     case DioExceptionType.badResponse:
       final status = error.response?.statusCode;
-      if (status == 401 || status == 403) return const UnauthorizedFailure();
-      if (status != null && status >= 500) return const ServerFailure();
+      if (status == 401 || status == 403) {
+        return const UnauthorizedFailure();
+      }
+      if (status != null && status >= 500) {
+        return const ServerFailure();
+      }
       return const RequestFailure();
     case DioExceptionType.badCertificate:
     case DioExceptionType.cancel:
