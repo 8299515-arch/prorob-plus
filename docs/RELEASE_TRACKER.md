@@ -7,7 +7,7 @@
 `release/google-play-ready`
 
 ## Последний зафиксированный этап
-2026-08-22 — CI format remediation
+2026-08-22 — CI maintenance: setup-java v5
 
 ### Реализовано
 - Проекты и задачи подключены к приложению.
@@ -33,7 +33,8 @@
 - CI теперь устанавливает Android SDK Platform 36 и Build Tools 36.0.0.
 - Добавлен контролируемый Gradle launcher для Linux CI и Windows.
 - Gradle distribution для launcher зафиксирован на 8.7.
-- Исправлено форматирование новых network/API infrastructure файлов после реального CI failure на `dart format`.
+- Исправлено форматирование network/API infrastructure файлов после реального CI failure на `dart format`.
+- GitHub Actions `actions/setup-java` обновлён с v4 до v5.
 
 ## Подтвержденные ограничения / блокеры
 1. Backend в этом репозитории не обнаружен.
