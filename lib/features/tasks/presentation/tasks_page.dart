@@ -269,7 +269,7 @@ class _TaskDialogState extends State<_TaskDialog> {
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<TaskPriority>(
-                  value: _priority,
+                  initialValue: _priority,
                   decoration: const InputDecoration(labelText: 'Приоритет'),
                   items: TaskPriority.values
                       .map(
