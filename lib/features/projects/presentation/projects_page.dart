@@ -165,7 +165,8 @@ class _ProjectsPageState extends State<ProjectsPage> {
                                 ),
                                 title: Text(project.name),
                                 subtitle: Text(
-                                  '${project.address}\nПрогресс: ${(project.progress * 100).round()}%',
+                                  '${project.address}\n'
+                                  'Прогресс: ${(project.progress * 100).round()}%',
                                 ),
                                 isThreeLine: true,
                                 trailing: PopupMenuButton<String>(
