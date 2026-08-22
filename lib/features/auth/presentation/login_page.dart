@@ -2,11 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/auth/auth_session.dart';
 import '../../../core/logging/app_logger.dart';
 import '../data/auth_repository.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({required this.authSession, super.key});
+
+  final AuthSession authSession;
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -34,16 +37,12 @@ class _LoginPageState extends State<LoginPage> {
     setState(() => _loading = true);
 
     try {
-      await _repo.login(
-        email: _email.text,
-        password: _password.text,
-      );
+      await _repo.login(email: _email.text, password: _password.text);
+      widget.authSession.setAuthenticated(true);
       if (mounted) context.go('/');
     } on DioException catch (error, stackTrace) {
       AppLogger.instance.e('Login request failed', error: error, stackTrace: stackTrace);
-      if (mounted) {
-        _showError(_dioMessage(error));
-      }
+      if (mounted) _showError(_dioMessage(error));
     } on FormatException catch (error) {
       if (mounted) _showError(error.message);
     } catch (error, stackTrace) {
@@ -88,17 +87,9 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     const Icon(Icons.construction, size: 64),
                     const SizedBox(height: 16),
-                    Text(
-                      'Прораб+',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
-                    ),
+                    Text('Прораб+', textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
-                    Text(
-                      'Управление строительными объектами',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
+                    Text('Управление строительными объектами', textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyLarge),
                     const SizedBox(height: 32),
                     TextFormField(
                       controller: _email,
@@ -129,10 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                           icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
                         ),
                       ),
-                      validator: (value) {
-                        if ((value ?? '').length < 6) return 'Пароль должен содержать минимум 6 символов';
-                        return null;
-                      },
+                      validator: (value) => (value ?? '').length < 6 ? 'Пароль должен содержать минимум 6 символов' : null,
                     ),
                     const SizedBox(height: 24),
                     FilledButton(
