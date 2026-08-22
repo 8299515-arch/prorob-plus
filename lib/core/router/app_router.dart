@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../auth/auth_session.dart';
 import '../../features/auth/presentation/login_page.dart';
 import '../../features/dashboard/presentation/dashboard_page.dart';
+import '../../features/projects/presentation/projects_page.dart';
 
 class AppRouter {
   AppRouter(this._authSession) {
@@ -12,20 +13,14 @@ class AppRouter {
       refreshListenable: _authSession,
       redirect: (context, state) {
         if (!_authSession.initialized) return null;
-
         final isLogin = state.matchedLocation == '/login';
         if (!_authSession.authenticated) return isLogin ? null : '/login';
         return isLogin ? '/' : null;
       },
       routes: [
-        GoRoute(
-          path: '/login',
-          builder: (context, state) => LoginPage(authSession: _authSession),
-        ),
-        GoRoute(
-          path: '/',
-          builder: (context, state) => DashboardPage(authSession: _authSession),
-        ),
+        GoRoute(path: '/login', builder: (context, state) => LoginPage(authSession: _authSession)),
+        GoRoute(path: '/', builder: (context, state) => DashboardPage(authSession: _authSession)),
+        GoRoute(path: '/projects', builder: (context, state) => const ProjectsPage()),
       ],
     );
   }
