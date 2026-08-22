@@ -251,9 +251,7 @@ class _ProjectEditDialogState extends State<_ProjectEditDialog> {
                 const SizedBox(height: 12),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Прогресс: ${(_progress * 100).round()}%',
-                  ),
+                  child: Text('Прогресс: ${(_progress * 100).round()}%'),
                 ),
                 Slider(
                   value: _progress,
