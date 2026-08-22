@@ -43,9 +43,19 @@ jobs:
         run: |
           set -euo pipefail
           curl -fsSL https://services.gradle.org/distributions/gradle-8.14.5-bin.zip -o /tmp/gradle.zip
-          rm -rf /tmp/gradle-8.14.5
+          rm -rf /tmp/gradle-8.14.5 /tmp/gradle-wrapper-project
           unzip -q /tmp/gradle.zip -d /tmp
-          /tmp/gradle-8.14.5/bin/gradle -p android wrapper --gradle-version 8.14.5 --distribution-type bin
+          mkdir -p /tmp/gradle-wrapper-project
+          cd /tmp/gradle-wrapper-project
+          printf "plugins {}\n" > settings.gradle
+          printf "tasks.register('noop')\n" > build.gradle
+          /tmp/gradle-8.14.5/bin/gradle wrapper --gradle-version 8.14.5 --distribution-type bin
+          cd "$GITHUB_WORKSPACE"
+          mkdir -p android/gradle/wrapper
+          cp /tmp/gradle-wrapper-project/gradlew android/gradlew
+          cp /tmp/gradle-wrapper-project/gradlew.bat android/gradlew.bat
+          cp /tmp/gradle-wrapper-project/gradle/wrapper/gradle-wrapper.jar android/gradle/wrapper/gradle-wrapper.jar
+          cp /tmp/gradle-wrapper-project/gradle/wrapper/gradle-wrapper.properties android/gradle/wrapper/gradle-wrapper.properties
           test -s android/gradle/wrapper/gradle-wrapper.jar
           grep -q 'gradle-8.14.5-bin.zip' android/gradle/wrapper/gradle-wrapper.properties
 
