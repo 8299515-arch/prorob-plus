@@ -4,8 +4,13 @@ import '../logging/app_logger.dart';
 import '../storage/token_storage.dart';
 
 class DioClient {
-  DioClient({TokenStorage? tokenStorage, String? baseUrl}) : _tokenStorage = tokenStorage ?? TokenStorage() {
-    final configuredBaseUrl = baseUrl ?? const String.fromEnvironment('API_BASE_URL', defaultValue: 'https://api.prorab.plus');
+  DioClient({TokenStorage? tokenStorage, String? baseUrl})
+      : _tokenStorage = tokenStorage ?? TokenStorage() {
+    final configuredBaseUrl = baseUrl ??
+        const String.fromEnvironment(
+          'API_BASE_URL',
+          defaultValue: 'https://api.prorab.plus',
+        );
     dio = Dio(
       BaseOptions(
         baseUrl: configuredBaseUrl,
@@ -30,7 +35,8 @@ class DioClient {
         },
         onError: (error, handler) {
           AppLogger.instance.e(
-            'HTTP ${error.response?.statusCode ?? 'network'} ${error.requestOptions.method} ${error.requestOptions.path}',
+            'HTTP ${error.response?.statusCode ?? 'network'} '
+            '${error.requestOptions.method} ${error.requestOptions.path}',
             error: error.error,
           );
           return handler.next(error);
