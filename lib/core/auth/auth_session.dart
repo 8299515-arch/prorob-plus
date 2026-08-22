@@ -3,7 +3,8 @@ import 'package:flutter/foundation.dart';
 import '../storage/token_storage.dart';
 
 class AuthSession extends ChangeNotifier {
-  AuthSession({TokenStorage? tokenStorage}) : _tokenStorage = tokenStorage ?? TokenStorage();
+  AuthSession({TokenStorage? tokenStorage})
+      : _tokenStorage = tokenStorage ?? TokenStorage();
 
   final TokenStorage _tokenStorage;
   bool _initialized = false;
