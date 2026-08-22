@@ -7,7 +7,7 @@
 `release/google-play-ready`
 
 ## Последний зафиксированный этап
-2026-08-22 — centralized network status monitor
+2026-08-22 — global offline UI integration
 
 ### Реализовано
 - Проекты и задачи подключены к приложению.
@@ -22,6 +22,7 @@
 - Privacy Policy добавлена в репозиторий.
 - Regression test для domain-модели задачи.
 - Централизованный `NetworkStatus` для определения online/offline состояния и отслеживания восстановления соединения.
+- Глобальный offline banner подключён на уровне `MaterialApp`.
 
 ## Подтвержденные ограничения / блокеры
 1. Backend в этом репозитории не обнаружен.
@@ -29,16 +30,15 @@
 3. Реальный CI status для последних commits не получен; нельзя считать AAB/analyze/test успешно пройденными без фактического workflow run.
 4. Privacy Policy требует реального публичного URL и контакт службы поддержки перед публикацией.
 5. Production signing keystore должен быть создан/сохранён владельцем проекта вне Git.
-6. Offline cache данных пока не реализован; текущий этап закрывает только централизованный network status.
+6. Offline cache данных пока не реализован; offline UI показывает состояние сети, но не заменяет локальную синхронизацию.
 
 ## Следующий этап
 1. Проверить/подключить реальный backend API.
-2. Подключить `NetworkStatus` к application lifecycle/UI.
-3. Завершить клиентскую обработку network/offline ошибок.
-4. Проверить все API-контракты и маршруты.
-5. Получить фактический зелёный CI.
-6. Выполнить Android/Google Play pre-release audit.
-7. Собрать подписанный production AAB.
+2. Завершить клиентскую обработку network/offline ошибок на API boundary.
+3. Проверить все API-контракты и маршруты.
+4. Получить фактический зелёный CI.
+5. Выполнить Android/Google Play pre-release audit.
+6. Собрать подписанный production AAB.
 
 ## Правило фиксации
 Каждый завершённый этап должен:
