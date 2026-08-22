@@ -21,7 +21,8 @@ abstract interface class FinanceRepository {
 }
 
 class ApiFinanceRepository implements FinanceRepository {
-  ApiFinanceRepository({DioClient? client}) : _dio = (client ?? DioClient()).dio;
+  ApiFinanceRepository({DioClient? client})
+      : _dio = (client ?? DioClient()).dio;
 
   final Dio _dio;
 
@@ -88,7 +89,8 @@ class ApiFinanceRepository implements FinanceRepository {
         title: '${json['title'] ?? ''}',
         amount: (json['amount'] as num?)?.toDouble() ?? 0,
         currency: '${json['currency'] ?? 'UAH'}',
-        date: DateTime.tryParse(json['date']?.toString() ?? '') ?? DateTime.now(),
+        date:
+            DateTime.tryParse(json['date']?.toString() ?? '') ?? DateTime.now(),
         category: json['category'] as String?,
       );
 }

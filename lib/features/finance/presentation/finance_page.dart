@@ -97,8 +97,8 @@ class _FinancePageState extends State<FinancePage> {
     }
   }
 
-  void _message(String text) => ScaffoldMessenger.of(context)
-      .showSnackBar(SnackBar(content: Text(text)));
+  void _message(String text) =>
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
 
   @override
   Widget build(BuildContext context) => Scaffold(
