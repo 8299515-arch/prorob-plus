@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 class NetworkStatus {
-  NetworkStatus({Connectivity? connectivity}) : _connectivity = connectivity ?? Connectivity();
+  NetworkStatus({Connectivity? connectivity})
+      : _connectivity = connectivity ?? Connectivity();
 
   final Connectivity _connectivity;
   final StreamController<bool> _controller = StreamController<bool>.broadcast();
