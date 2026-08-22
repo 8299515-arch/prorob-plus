@@ -41,7 +41,10 @@ class _ProrabAppState extends State<ProrabApp> {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       routerConfig: _router.router,
-      builder: (context, child) => NetworkBanner(networkStatus: _networkStatus, child: child ?? const SizedBox.shrink()),
+      builder: (context, child) => NetworkBanner(
+        networkStatus: _networkStatus,
+        child: child ?? const SizedBox.shrink(),
+      ),
     );
   }
 }
