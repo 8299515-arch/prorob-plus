@@ -235,7 +235,7 @@ class _ProjectEditDialogState extends State<_ProjectEditDialog> {
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<ProjectStatus>(
-                  value: _status,
+                  initialValue: _status,
                   decoration: const InputDecoration(labelText: 'Статус'),
                   items: ProjectStatus.values
                       .map(
