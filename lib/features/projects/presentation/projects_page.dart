@@ -137,9 +137,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
                           children: const [
                             SizedBox(height: 180),
                             Center(
-                              child: Text(
-                                'Пока нет строительных объектов.',
-                              ),
+                              child: Text('Пока нет строительных объектов.'),
                             ),
                           ],
                         )
