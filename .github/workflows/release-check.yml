@@ -64,7 +64,7 @@ jobs:
           storePassword=changeit
           keyPassword=changeit
           keyAlias=ci-release
-          storeFile=ci-release.jks
+          storeFile=../ci-release.jks
           EOF
 
       - name: Build Android release
