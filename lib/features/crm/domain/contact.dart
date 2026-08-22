@@ -1,7 +1,16 @@
 enum ContactType { client, contractor, employee }
 
 class Contact {
-  const Contact({required this.id, required this.name, required this.type, this.phone, this.email, this.company, this.notes});
+  const Contact({
+    required this.id,
+    required this.name,
+    required this.type,
+    this.phone,
+    this.email,
+    this.company,
+    this.notes,
+  });
+
   final String id;
   final String name;
   final ContactType type;
