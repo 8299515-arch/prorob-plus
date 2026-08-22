@@ -112,7 +112,9 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                   Row(
                     children: [
                       Expanded(
-                        child: LinearProgressIndicator(value: _project.progress),
+                        child: LinearProgressIndicator(
+                          value: _project.progress,
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Text('$percent%'),
