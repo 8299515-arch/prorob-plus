@@ -33,6 +33,17 @@ jobs:
       - name: Install Android API 36
         run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
 
+      - name: Generate Gradle wrapper for CI
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://services.gradle.org/distributions/gradle-8.14.5-bin.zip -o /tmp/gradle.zip
+          rm -rf /tmp/gradle-8.14.5
+          unzip -q /tmp/gradle.zip -d /tmp
+          /tmp/gradle-8.14.5/bin/gradle -p android wrapper --gradle-version 8.14.5 --distribution-type bin
+          test -s android/gradle/wrapper/gradle-wrapper.jar
+          grep -q 'gradle-8.14.5-bin.zip' android/gradle/wrapper/gradle-wrapper.properties
+
       - name: Enable Gradle launcher
         run: chmod +x android/gradlew
 
