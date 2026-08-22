@@ -186,9 +186,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
       );
 
   String _subtitle(ProjectDocument d) {
-    final size = d.sizeBytes == null
-        ? ''
-        : ' • ${_formatSize(d.sizeBytes!)}';
+    final size = d.sizeBytes == null ? '' : ' • ${_formatSize(d.sizeBytes!)}';
     return '${d.mimeType ?? 'Документ'}$size';
   }
 
