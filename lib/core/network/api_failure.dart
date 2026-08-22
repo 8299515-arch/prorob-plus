@@ -33,6 +33,7 @@ ApiFailure mapDioFailure(Object error) {
     case DioExceptionType.connectionTimeout:
     case DioExceptionType.receiveTimeout:
     case DioExceptionType.sendTimeout:
+    case DioExceptionType.transformTimeout:
       return const NetworkFailure();
     case DioExceptionType.badResponse:
       final status = error.response?.statusCode;
