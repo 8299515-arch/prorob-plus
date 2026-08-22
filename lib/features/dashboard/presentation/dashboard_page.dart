@@ -13,7 +13,7 @@ class DashboardPage extends StatelessWidget {
       _M(Icons.task_alt, 'Задачи', 'Дедлайны, чек-листы и контроль', '/tasks'),
       _M(Icons.account_balance_wallet, 'Финансы', 'Сметы, расходы и прибыль', '/finance'),
       _M(Icons.people_outline, 'CRM и команда', 'Клиенты, бригады и роли', '/crm'),
-      _M(Icons.description_outlined, 'Документы', 'Документы и файлы объектов', null),
+      _M(Icons.description_outlined, 'Документы', 'Документы и файлы объектов', '/documents'),
     ];
     return Scaffold(
       appBar: AppBar(title: const Text('Прораб+'), actions: [IconButton(tooltip: 'Выйти', onPressed: authSession.logout, icon: const Icon(Icons.logout))]),
@@ -32,15 +32,14 @@ class DashboardPage extends StatelessWidget {
             itemBuilder: (context, i) {
               final m = modules[i];
               return Card(child: InkWell(
-                onTap: m.route == null ? null : () => context.push(m.route!),
+                onTap: () => context.push(m.route),
                 child: Padding(padding: const EdgeInsets.all(18), child: Row(children: [
                   Icon(m.icon, size: 34), const SizedBox(width: 16),
                   Expanded(child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Text(m.title, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 4), Text(m.subtitle),
-                    if (m.route == null) const Text('Скоро'),
                   ])),
-                  if (m.route != null) const Icon(Icons.chevron_right),
+                  const Icon(Icons.chevron_right),
                 ])),
               ));
             },
@@ -56,5 +55,5 @@ class _M {
   final IconData icon;
   final String title;
   final String subtitle;
-  final String? route;
+  final String route;
 }
