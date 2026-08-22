@@ -7,7 +7,7 @@
 `release/google-play-ready`
 
 ## Последний зафиксированный этап
-2026-08-22 — Android release versioning audit
+2026-08-22 — Android API 36 + CI SDK provisioning
 
 ### Реализовано
 - Проекты и задачи подключены к приложению.
@@ -25,10 +25,14 @@
 - Глобальный offline banner подключён на уровне `MaterialApp`.
 - Централизованное преобразование Dio errors в пользовательские `NetworkFailure`, `UnauthorizedFailure`, `ServerFailure`, `RequestFailure`.
 - Типизированная граница `ApiResult<T>` / `ApiSuccess<T>` / `ApiError<T>` для безопасной передачи результата между data/domain и UI.
-- `ProjectRepository` и `TaskRepository` теперь преобразуют Dio/network errors в типизированные `ApiFailure` вместо передачи сырых Dio exceptions выше data-layer.
-- `FinanceRepository` теперь также преобразует Dio/network errors в типизированные `ApiFailure`.
+- `ProjectRepository` и `TaskRepository` преобразуют Dio/network errors в типизированные `ApiFailure`.
+- `FinanceRepository` преобразует Dio/network errors в типизированные `ApiFailure`.
 - Android release version увеличен с `1.0.0+1` до `1.0.0+2`.
-- Добавлена явная зависимость `connectivity_plus`, необходимая для `NetworkStatus`.
+- Добавлена явная зависимость `connectivity_plus`.
+- Android `compileSdk` и `targetSdk` зафиксированы на API 36.
+- CI теперь устанавливает Android SDK Platform 36 и Build Tools 36.0.0.
+- Добавлен контролируемый Gradle launcher для Linux CI и Windows.
+- Gradle distribution для launcher зафиксирован на 8.7.
 
 ## Подтвержденные ограничения / блокеры
 1. Backend в этом репозитории не обнаружен.
@@ -38,10 +42,11 @@
 5. Production signing keystore должен быть создан/сохранён владельцем проекта вне Git.
 6. Offline cache данных пока не реализован; offline UI показывает состояние сети, но не заменяет локальную синхронизацию.
 7. CRM/Documents repositories ещё нужно проверить и перевести на единый failure mapping, если они содержат прямые Dio calls.
+8. Gradle launcher проверяет/загружает Gradle 8.7 самостоятельно; полноценный стандартный Gradle Wrapper JAR пока не добавлен.
 
 ## Следующий этап
-1. Запустить/проверить фактический GitHub Actions workflow для commit `1c60fbd141853b09558344eac0d7f1b0e55eb910`.
-2. Исправить реальные compile/analyze/test ошибки, если CI их обнаружит.
+1. Получить фактический GitHub Actions run после Android API 36 изменений.
+2. Исправить реальные compile/analyze/test/build ошибки, если CI их обнаружит.
 3. Проверить CRM/Documents/Account repositories.
 4. Проверить API contracts и backend.
 5. Выполнить Android/Google Play pre-release audit.
