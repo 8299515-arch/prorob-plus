@@ -23,7 +23,8 @@ class Project {
     ProjectStatus? status,
     double? progress,
     String? description,
-  }) => Project(
+  }) =>
+      Project(
         id: id,
         name: name ?? this.name,
         address: address ?? this.address,
