@@ -7,7 +7,7 @@
 `release/google-play-ready`
 
 ## Последний зафиксированный этап
-2026-08-22 — Projects + Tasks API failure boundary
+2026-08-22 — Finance API failure boundary
 
 ### Реализовано
 - Проекты и задачи подключены к приложению.
@@ -26,6 +26,7 @@
 - Централизованное преобразование Dio errors в пользовательские `NetworkFailure`, `UnauthorizedFailure`, `ServerFailure`, `RequestFailure`.
 - Типизированная граница `ApiResult<T>` / `ApiSuccess<T>` / `ApiError<T>` для безопасной передачи результата между data/domain и UI.
 - `ProjectRepository` и `TaskRepository` теперь преобразуют Dio/network errors в типизированные `ApiFailure` вместо передачи сырых Dio exceptions выше data-layer.
+- `FinanceRepository` теперь также преобразует Dio/network errors в типизированные `ApiFailure`.
 
 ## Подтвержденные ограничения / блокеры
 1. Backend в этом репозитории не обнаружен.
@@ -34,10 +35,10 @@
 4. Privacy Policy требует реального публичного URL и контакт службы поддержки перед публикацией.
 5. Production signing keystore должен быть создан/сохранён владельцем проекта вне Git.
 6. Offline cache данных пока не реализован; offline UI показывает состояние сети, но не заменяет локальную синхронизацию.
-7. Finance/CRM/Documents repositories ещё нужно перевести на единый failure mapping.
+7. CRM/Documents repositories ещё нужно проверить и перевести на единый failure mapping, если они содержат прямые Dio calls.
 
 ## Следующий этап
-1. Перевести Finance/CRM/Documents/Account repositories на единый failure boundary.
+1. Проверить CRM/Documents/Account repositories и перевести прямые API calls на единый failure boundary.
 2. Проверить/подключить реальный backend API.
 3. Проверить все API-контракты и маршруты.
 4. Получить фактический зелёный CI.
