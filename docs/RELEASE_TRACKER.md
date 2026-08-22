@@ -7,7 +7,7 @@
 `release/google-play-ready`
 
 ## Последний зафиксированный этап
-2026-08-22 — Android API 36 + CI SDK provisioning
+2026-08-22 — CI format remediation
 
 ### Реализовано
 - Проекты и задачи подключены к приложению.
@@ -33,11 +33,12 @@
 - CI теперь устанавливает Android SDK Platform 36 и Build Tools 36.0.0.
 - Добавлен контролируемый Gradle launcher для Linux CI и Windows.
 - Gradle distribution для launcher зафиксирован на 8.7.
+- Исправлено форматирование новых network/API infrastructure файлов после реального CI failure на `dart format`.
 
 ## Подтвержденные ограничения / блокеры
 1. Backend в этом репозитории не обнаружен.
 2. Реализация `DELETE /account` на сервере не подтверждена.
-3. Последний workflow должен быть фактически запущен и проверен; наличие YAML само по себе не означает успешный AAB.
+3. После format remediation требуется новый фактический workflow run; зелёный CI пока не подтверждён.
 4. Privacy Policy требует реального публичного URL и контакт службы поддержки перед публикацией.
 5. Production signing keystore должен быть создан/сохранён владельцем проекта вне Git.
 6. Offline cache данных пока не реализован; offline UI показывает состояние сети, но не заменяет локальную синхронизацию.
@@ -45,8 +46,8 @@
 8. Gradle launcher проверяет/загружает Gradle 8.7 самостоятельно; полноценный стандартный Gradle Wrapper JAR пока не добавлен.
 
 ## Следующий этап
-1. Получить фактический GitHub Actions run после Android API 36 изменений.
-2. Исправить реальные compile/analyze/test/build ошибки, если CI их обнаружит.
+1. Получить фактический GitHub Actions run после format remediation.
+2. Исправить реальные analyze/test/build ошибки, если CI их обнаружит.
 3. Проверить CRM/Documents/Account repositories.
 4. Проверить API contracts и backend.
 5. Выполнить Android/Google Play pre-release audit.
