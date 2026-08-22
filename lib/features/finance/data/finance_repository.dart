@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import '../../../core/network/api_failure.dart';
 import '../../../core/network/dio_client.dart';
 import '../domain/finance_entry.dart';
 
@@ -15,26 +16,40 @@ class ApiFinanceRepository implements FinanceRepository {
 
   @override
   Future<List<FinanceEntry>> getEntries({String? projectId}) async {
-    final response = await _dio.get<List<dynamic>>('/finance', queryParameters: {if (projectId != null) 'project_id': projectId});
-    return (response.data ?? const <dynamic>[]).whereType<Map<String, dynamic>>().map(_fromJson).toList(growable: false);
+    try {
+      final response = await _dio.get<List<dynamic>>('/finance', queryParameters: {if (projectId != null) 'project_id': projectId});
+      return (response.data ?? const <dynamic>[]).whereType<Map<String, dynamic>>().map(_fromJson).toList(growable: false);
+    } catch (error) {
+      throw mapDioFailure(error);
+    }
   }
 
   @override
   Future<FinanceEntry> createEntry({required String projectId, required FinanceEntryType type, required String title, required double amount, String currency = 'UAH', String? category, DateTime? date}) async {
-    final response = await _dio.post<Map<String, dynamic>>('/finance', data: {
-      'project_id': projectId,
-      'type': type.name,
-      'title': title.trim(),
-      'amount': amount,
-      'currency': currency,
-      if (category?.trim().isNotEmpty == true) 'category': category!.trim(),
-      'date': (date ?? DateTime.now()).toUtc().toIso8601String(),
-    });
-    return _fromJson(response.data ?? const {});
+    try {
+      final response = await _dio.post<Map<String, dynamic>>('/finance', data: {
+        'project_id': projectId,
+        'type': type.name,
+        'title': title.trim(),
+        'amount': amount,
+        'currency': currency,
+        if (category?.trim().isNotEmpty == true) 'category': category!.trim(),
+        'date': (date ?? DateTime.now()).toUtc().toIso8601String(),
+      });
+      return _fromJson(response.data ?? const {});
+    } catch (error) {
+      throw mapDioFailure(error);
+    }
   }
 
   @override
-  Future<void> deleteEntry(String id) async => _dio.delete<void>('/finance/$id');
+  Future<void> deleteEntry(String id) async {
+    try {
+      await _dio.delete<void>('/finance/$id');
+    } catch (error) {
+      throw mapDioFailure(error);
+    }
+  }
 
   FinanceEntry _fromJson(Map<String, dynamic> json) => FinanceEntry(
         id: '${json['id'] ?? ''}',
