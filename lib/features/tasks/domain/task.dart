@@ -27,7 +27,8 @@ class Task {
     TaskPriority? priority,
     String? description,
     DateTime? dueDate,
-  }) => Task(
+  }) =>
+      Task(
         id: id,
         projectId: projectId,
         title: title ?? this.title,
