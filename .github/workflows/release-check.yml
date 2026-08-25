@@ -1,0 +1,97 @@
+name: Release Check
+
+on:
+  push:
+    branches:
+      - 'release/**'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  flutter-release-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Android SDK 36
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android API 36
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Create Flutter local.properties for CI
+        shell: bash
+        run: |
+          printf 'flutter.sdk=%s\n' "$FLUTTER_ROOT" > android/local.properties
+
+      - name: Generate Gradle wrapper for CI
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://services.gradle.org/distributions/gradle-8.14.5-bin.zip -o /tmp/gradle.zip
+          rm -rf /tmp/gradle-8.14.5 /tmp/gradle-wrapper-project
+          unzip -q /tmp/gradle.zip -d /tmp
+          mkdir -p /tmp/gradle-wrapper-project
+          cd /tmp/gradle-wrapper-project
+          printf "plugins {}\n" > settings.gradle
+          printf "tasks.register('noop')\n" > build.gradle
+          /tmp/gradle-8.14.5/bin/gradle wrapper --gradle-version 8.14.5 --distribution-type bin
+          cd "$GITHUB_WORKSPACE"
+          mkdir -p android/gradle/wrapper
+          cp /tmp/gradle-wrapper-project/gradlew android/gradlew
+          cp /tmp/gradle-wrapper-project/gradlew.bat android/gradlew.bat
+          cp /tmp/gradle-wrapper-project/gradle/wrapper/gradle-wrapper.jar android/gradle/wrapper/gradle-wrapper.jar
+          cp /tmp/gradle-wrapper-project/gradle/wrapper/gradle-wrapper.properties android/gradle/wrapper/gradle-wrapper.properties
+          test -s android/gradle/wrapper/gradle-wrapper.jar
+          grep -q 'gradle-8.14.5-bin.zip' android/gradle/wrapper/gradle-wrapper.properties
+
+      - name: Enable Gradle launcher
+        run: chmod +x android/gradlew
+
+      - name: Dependencies
+        run: flutter pub get
+
+      - name: Format check
+        run: dart format --output=none --set-exit-if-changed lib test
+
+      - name: Analyze
+        run: flutter analyze --fatal-infos
+
+      - name: Tests
+        run: flutter test --coverage
+
+      - name: Create ephemeral CI signing key
+        shell: bash
+        run: |
+          keytool -genkeypair -v \
+            -keystore android/ci-release.jks \
+            -storepass changeit \
+            -keypass changeit \
+            -alias ci-release \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 3650 \
+            -dname "CN=CI Release, OU=Build, O=Prorab Plus, L=Kyiv, ST=Kyiv, C=UA"
+          cat > android/key.properties <<'EOF'
+          storePassword=changeit
+          keyPassword=changeit
+          keyAlias=ci-release
+          storeFile=../ci-release.jks
+          EOF
+
+      - name: Build Android release
+        run: flutter build appbundle --release --no-pub
