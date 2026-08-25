@@ -5,9 +5,9 @@
 
 ## Последняя зафиксированная точка
 
-Commit: `06a76f4c5acb65192e75682e53ffccaacaabdb9b`
+Commit: `30170d7a5506c91949f5d5b2f2cb03b275ab00fd`
 
-На этом commit исправлен CI-этап генерации Gradle Wrapper: wrapper теперь генерируется во временном чистом Gradle-проекте, чтобы конфигурация Android-приложения и production signing не блокировали создание wrapper.
+Исправлена Android launch theme: `Theme.Light.NoActionBar` заменена на доступную Material-тему `Theme.Material.Light.NoActionBar` для прохождения release AAB resource compilation.
 
 ## Что уже сделано
 
@@ -22,15 +22,17 @@ Commit: `06a76f4c5acb65192e75682e53ffccaacaabdb9b`
 - Kotlin Gradle Plugin обновлён до 2.2.20.
 - Android Gradle Plugin обновлён до 8.13.2.
 - CI signing создаёт временный release keystore.
-- Исправлен порядок CI-шагов, связанных с local.properties и Gradle wrapper.
+- Gradle Wrapper генерируется в чистом временном Gradle-проекте.
+- Реальный `flutter build appbundle --release` уже запускается.
+- Исправлена Android resource theme, которая блокировала AAB.
 
-## Последний найденный блокер
+## Последний блокер и исправление
 
-Предыдущий CI падал при генерации Gradle Wrapper, потому что команда запускала конфигурацию всего Android-проекта до создания signing-файлов. Это исправлено в commit `06a76f4c5acb65192e75682e53ffccaacaabdb9b`.
+Release Check дошёл до `Build Android release`, но Android resource compiler не находил `android:style/Theme.Light.NoActionBar`. В `android/app/src/main/res/values/styles.xml` обе темы переведены на `android:style/Theme.Material.Light.NoActionBar`.
 
 ## Следующий шаг
 
-Запустить/проверить новый Release Check для commit `06a76f4c5acb65192e75682e53ffccaacaabdb9b`.
+Проверить новый Release Check для commit `30170d7a5506c91949f5d5b2f2cb03b275ab00fd`.
 
 Порядок проверки:
 
