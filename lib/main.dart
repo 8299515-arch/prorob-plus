@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'app.dart';
 
-void main() {
+import 'app.dart';
+import 'core/auth/auth_session.dart';
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const ProrabApp());
+
+  final authSession = AuthSession();
+  await authSession.initialize();
+
+  runApp(ProrabApp(authSession: authSession));
 }

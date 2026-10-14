@@ -1,0 +1,88 @@
+name: Release Check
+
+on:
+  push:
+    branches:
+      - 'release/**'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  flutter-release-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.24.0'
+          cache: true
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Add Android SDK manager to PATH
+        shell: bash
+        run: |
+          sdk_root="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          sdkmanager="$(find "$sdk_root/cmdline-tools" -type f -name sdkmanager -print | sort -V | tail -n 1)"
+          if [ -z "$sdkmanager" ]; then
+            echo "Android SDK manager not found under $sdk_root/cmdline-tools" >&2
+            exit 1
+          fi
+          dirname "$sdkmanager" >> "$GITHUB_PATH"
+
+      - name: Accept Android SDK licenses
+        run: yes | sdkmanager --licenses
+
+      - name: Install Android API 36
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0" "ndk;27.0.12077973"
+
+      - name: Create Flutter local.properties for CI
+        shell: bash
+        run: |
+          printf 'flutter.sdk=%s\n' "$FLUTTER_ROOT" > android/local.properties
+
+      - name: Enable Gradle launcher
+        run: chmod +x android/gradlew
+
+      - name: Dependencies
+        run: flutter pub get
+
+      - name: Format check
+        run: dart format --output=none --set-exit-if-changed lib test
+
+      - name: Analyze
+        run: flutter analyze --fatal-infos
+
+      - name: Tests
+        run: flutter test --coverage
+
+      - name: Create ephemeral CI signing key
+        shell: bash
+        run: |
+          keytool -genkeypair -v \
+            -keystore android/ci-release.jks \
+            -storepass changeit \
+            -keypass changeit \
+            -alias ci-release \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 3650 \
+            -dname "CN=CI Release, OU=Build, O=Prorab Plus, L=Kyiv, ST=Kyiv, C=UA"
+          cat > android/key.properties <<'EOF'
+          storePassword=changeit
+          keyPassword=changeit
+          keyAlias=ci-release
+          storeFile=../ci-release.jks
+          EOF
+
+      - name: Build Android release
+        run: flutter build appbundle --release --no-pub

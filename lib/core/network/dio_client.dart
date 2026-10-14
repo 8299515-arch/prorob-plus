@@ -1,36 +1,50 @@
 import 'package:dio/dio.dart';
 
+import '../logging/app_logger.dart';
+import '../storage/token_storage.dart';
+
 class DioClient {
-  static final DioClient _instance = DioClient._internal();
-  factory DioClient() => _instance;
-
-  late final Dio dio;
-
-  DioClient._internal() {
+  DioClient({TokenStorage? tokenStorage, String? baseUrl})
+      : _tokenStorage = tokenStorage ?? TokenStorage() {
+    final configuredBaseUrl = baseUrl ??
+        const String.fromEnvironment(
+          'API_BASE_URL',
+          defaultValue: 'https://api.prorab.plus',
+        );
     dio = Dio(
       BaseOptions(
-        baseUrl: 'https://api.prorab.plus',
+        baseUrl: configuredBaseUrl,
         connectTimeout: const Duration(seconds: 15),
-        receiveTimeout: const Duration(seconds: 15),
-        headers: {
+        sendTimeout: const Duration(seconds: 15),
+        receiveTimeout: const Duration(seconds: 20),
+        headers: const <String, dynamic>{
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
       ),
     );
 
     dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (options, handler) {
-          // TODO: attach token
+        onRequest: (options, handler) async {
+          final token = await _tokenStorage.getToken();
+          if (token != null && token.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
           return handler.next(options);
         },
-        onResponse: (response, handler) {
-          return handler.next(response);
-        },
-        onError: (DioException e, handler) {
-          return handler.next(e);
+        onError: (error, handler) {
+          AppLogger.instance.e(
+            'HTTP ${error.response?.statusCode ?? 'network'} '
+            '${error.requestOptions.method} ${error.requestOptions.path}',
+            error: error.error,
+          );
+          return handler.next(error);
         },
       ),
     );
   }
+
+  final TokenStorage _tokenStorage;
+  late final Dio dio;
 }

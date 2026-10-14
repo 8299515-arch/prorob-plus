@@ -1,23 +1,21 @@
-import 'package:hive/hive.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class TokenStorage {
-  static const _boxName = 'auth_box';
-  static const _key = 'token';
+  TokenStorage({FlutterSecureStorage? storage})
+      : _storage = storage ?? const FlutterSecureStorage();
 
-  Future<Box> _box() async => await Hive.openBox(_boxName);
+  static const _key = 'access_token';
+  final FlutterSecureStorage _storage;
 
   Future<void> saveToken(String token) async {
-    final box = await _box();
-    await box.put(_key, token);
+    await _storage.write(key: _key, value: token);
   }
 
   Future<String?> getToken() async {
-    final box = await _box();
-    return box.get(_key);
+    return _storage.read(key: _key);
   }
 
   Future<void> clear() async {
-    final box = await _box();
-    await box.delete(_key);
+    await _storage.delete(key: _key);
   }
 }
