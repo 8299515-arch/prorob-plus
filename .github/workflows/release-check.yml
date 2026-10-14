@@ -28,6 +28,17 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Add Android SDK manager to PATH
+        shell: bash
+        run: |
+          sdk_root="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          sdkmanager="$(find "$sdk_root/cmdline-tools" -type f -name sdkmanager -print | sort -V | tail -n 1)"
+          if [ -z "$sdkmanager" ]; then
+            echo "Android SDK manager not found under $sdk_root/cmdline-tools" >&2
+            exit 1
+          fi
+          dirname "$sdkmanager" >> "$GITHUB_PATH"
+
       - name: Accept Android SDK licenses
         run: yes | sdkmanager --licenses
 
