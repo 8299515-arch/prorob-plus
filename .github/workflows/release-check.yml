@@ -19,6 +19,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: '3.24.0'
           cache: true
 
       - name: Setup Java
@@ -27,11 +28,11 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Setup Android SDK 36
-        uses: android-actions/setup-android@v3
+      - name: Accept Android SDK licenses
+        run: yes | sdkmanager --licenses
 
       - name: Install Android API 36
-        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0" "ndk;27.0.12077973"
 
       - name: Create Flutter local.properties for CI
         shell: bash
