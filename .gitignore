@@ -16,6 +16,7 @@ venv/
 build/
 coverage/
 *.lock
+!pubspec.lock
 
 # IDE
 .idea/
@@ -32,3 +33,4 @@ android/*.keystore
 android/.gradle/
 android/app/build/
 android/captures/
+android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java

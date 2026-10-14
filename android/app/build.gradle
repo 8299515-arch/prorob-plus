@@ -9,7 +9,16 @@ plugins {
 android {
     namespace = "com.prorab.plus"
     compileSdk = 36
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
 
     defaultConfig {
         applicationId = "com.prorab.plus"
@@ -22,15 +31,14 @@ android {
     signingConfigs {
         release {
             def keyPropertiesFile = rootProject.file("key.properties")
-            if (!keyPropertiesFile.exists()) {
-                throw new GradleException("android/key.properties is required for a production release build")
+            if (keyPropertiesFile.exists()) {
+                def keyProperties = new Properties()
+                keyPropertiesFile.withInputStream { keyProperties.load(it) }
+                keyAlias = keyProperties['keyAlias']
+                keyPassword = keyProperties['keyPassword']
+                storeFile = keyProperties['storeFile'] ? file(keyProperties['storeFile']) : null
+                storePassword = keyProperties['storePassword']
             }
-            def keyProperties = new Properties()
-            keyPropertiesFile.withInputStream { keyProperties.load(it) }
-            keyAlias = keyProperties['keyAlias']
-            keyPassword = keyProperties['keyPassword']
-            storeFile = keyProperties['storeFile'] ? file(keyProperties['storeFile']) : null
-            storePassword = keyProperties['storePassword']
         }
     }
 
@@ -45,4 +53,13 @@ android {
 
 flutter {
     source = "../.."
+}
+
+gradle.taskGraph.whenReady { taskGraph ->
+    def releaseTasks = taskGraph.allTasks.findAll { task ->
+        task.project == project && task.name.toLowerCase().contains("release")
+    }
+    if (!releaseTasks.isEmpty() && !rootProject.file("key.properties").exists()) {
+        throw new GradleException("android/key.properties is required for a production release build")
+    }
 }

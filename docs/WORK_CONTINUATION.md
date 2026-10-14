@@ -1,13 +1,11 @@
 # Прораб+ — контрольная точка продолжения
 
-Дата: 2026-08-22
+Дата: 2026-10-14
 Ветка: `release/google-play-ready`
 
 ## Последняя зафиксированная точка
 
-Commit: `30170d7a5506c91949f5d5b2f2cb03b275ab00fd`
-
-Исправлена Android launch theme: `Theme.Light.NoActionBar` заменена на доступную Material-тему `Theme.Material.Light.NoActionBar` для прохождения release AAB resource compilation.
+Локально проверено на Android-телефоне: `flutter run -d VSGEFY8DEQFIKZM7` собрал debug APK, установил его и запустил приложение.
 
 ## Что уже сделано
 
@@ -25,6 +23,10 @@ Commit: `30170d7a5506c91949f5d5b2f2cb03b275ab00fd`
 - Gradle Wrapper генерируется в чистом временном Gradle-проекте.
 - Реальный `flutter build appbundle --release` уже запускается.
 - Исправлена Android resource theme, которая блокировала AAB.
+- Локальная сборка на Flutter 3.24 требует NDK 27 и Java/Kotlin target 17.
+- Debug-сборка работает без production keystore; отсутствие `android/key.properties` блокирует только release-сборки.
+- Стандартный Gradle Wrapper 8.14.5 сохранён в репозитории и используется локально и в CI.
+- `pubspec.lock` включён в Git для воспроизводимого разрешения зависимостей.
 
 ## Последний блокер и исправление
 
@@ -32,18 +34,17 @@ Release Check дошёл до `Build Android release`, но Android resource com
 
 ## Следующий шаг
 
-Проверить новый Release Check для commit `30170d7a5506c91949f5d5b2f2cb03b275ab00fd`.
+Проверить новый Release Check после публикации исправлений в `release/google-play-ready`.
 
 Порядок проверки:
 
-1. Generate Gradle wrapper
-2. Dependencies
-3. Format
-4. Analyze
-5. Tests
-6. CI signing
-7. `flutter build appbundle --release`
-8. Проверка полученного AAB и Google Play readiness
+1. Dependencies
+2. Format
+3. Analyze
+4. Tests
+5. CI signing
+6. `flutter build appbundle --release`
+7. Проверка полученного AAB и Google Play readiness
 
 ## Правило продолжения
 

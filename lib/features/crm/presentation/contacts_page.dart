@@ -267,7 +267,7 @@ class _ContactDialogState extends State<_ContactDialog> {
                 ),
                 const SizedBox(height: 10),
                 DropdownButtonFormField<ContactType>(
-                  initialValue: _type,
+                  value: _type,
                   decoration: const InputDecoration(labelText: 'Тип'),
                   items: ContactType.values
                       .map(

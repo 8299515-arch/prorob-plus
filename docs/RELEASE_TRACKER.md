@@ -32,7 +32,7 @@
 - Android `compileSdk` и `targetSdk` зафиксированы на API 36.
 - CI теперь устанавливает Android SDK Platform 36 и Build Tools 36.0.0.
 - Добавлен контролируемый Gradle launcher для Linux CI и Windows.
-- Gradle distribution для launcher зафиксирован на 8.7.
+- Добавлен стандартный Gradle Wrapper 8.14.5, совместимый с Android Gradle Plugin 8.13.2; CI и локальные сборки используют один wrapper.
 - Исправлено форматирование network/API infrastructure файлов после реального CI failure на `dart format`.
 - GitHub Actions `actions/setup-java` обновлён с v4 до v5.
 
@@ -44,7 +44,7 @@
 5. Production signing keystore должен быть создан/сохранён владельцем проекта вне Git.
 6. Offline cache данных пока не реализован; offline UI показывает состояние сети, но не заменяет локальную синхронизацию.
 7. CRM/Documents repositories ещё нужно проверить и перевести на единый failure mapping, если они содержат прямые Dio calls.
-8. Gradle launcher проверяет/загружает Gradle 8.7 самостоятельно; полноценный стандартный Gradle Wrapper JAR пока не добавлен.
+8. Перед production-релизом остаётся подтвердить release AAB с production keystore и публичный Privacy Policy URL.
 
 ## Следующий этап
 1. Получить фактический GitHub Actions run после format remediation.
